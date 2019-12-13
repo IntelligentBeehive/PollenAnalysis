@@ -1,26 +1,27 @@
-from Domain.Plant import Plant
 import csv
+import inspect
+import numpy as np
+import cv2
+import pandas as pd
+from matplotlib import pyplot as plt
+from Domain.Plant import Plant
 
-
-# import pandas as pd
+from Domain.Pollen import Pollen
 
 
 class ColorScan:
-    def __init__(self):
-        self.plant1 = Plant("Lupin", "#6c2d23", "summer", 108, 45, 35)
+    def pollen_compare(self, pollen):
+        inspect.isclass(Pollen)
+        with open('..\CSV\pollenchart.csv', 'r', encoding="utf-8-sig") as csvDataFile:
+            csv_reader = csv.DictReader(csvDataFile, delimiter=",")
+            for row in csv_reader:
+                rgb = {int(row['Red']), int(row['Green']), int(row['Blue'])}
+                season = row['Season']
+                if rgb == pollen.rgb and season == pollen.season:
+                    return Plant(row['Plant name EN'])
 
-    def pixel_compare(self, r, g, b):
-        return self.plant1.rgb == {r, g, b}
 
 
 colorScan = ColorScan()
-print(ColorScan.pixel_compare(colorScan, 5, 5, 5))
-print(ColorScan.pixel_compare(colorScan, 108, 45, 35))
-
-with open('..\CSV\pollenchart.csv', 'r', encoding="utf-8-sig") as csvDataFile:
-    csvReader = csv.DictReader(csvDataFile, delimiter="	")
-    print(csvReader.fieldnames)
-    for row in csvReader:
-        found = ColorScan.pixel_compare(colorScan, row['Red'], row['Green'], row['Blue'])
-        if found:
-            print(row)
+print(ColorScan.pollen_compare(colorScan, Pollen(5, 5, 5)))
+print(ColorScan.pollen_compare(colorScan, Pollen(171, 181, 101)))

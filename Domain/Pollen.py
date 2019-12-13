@@ -5,20 +5,25 @@ class Pollen:
     """Domain model Pollen"""
 
     def __init__(self, red, green, blue):
-        self.name = 'unknown'
+        self.rgb = {int(red), int(green), int(blue)}
+        self.created = datetime.datetime.now()
+        print(self.season)
+
+    # def __init__(self, hex):
+    #     self.hex = hex
+    #     self.season = self.get_season()
 
     @property
-    def get_season(self):
-        date = datetime.datetime.now()
-        year_day = date.timetuple().tm_yday
+    def season(self):
+        year_day = self.created.timetuple().tm_yday
 
         if year_day < 61:
-            return {1, 'winter'}
+            return 'winter'
         elif year_day < 173:
-            return {2, 'spring'}
+            return 'spring'
         elif year_day < 265:
-            return {3, 'summer'}
+            return 'summer'
         elif year_day < 356:
-            return {4, 'autumn'}
+            return 'autumn'
         else:
-            return {1, 'winter'}
+            return 'winter'
