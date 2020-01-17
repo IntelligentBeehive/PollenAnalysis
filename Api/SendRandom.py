@@ -3,6 +3,7 @@ import json
 import random
 import requests
 import re
+from datetime import datetime
 
 
 def make_record(row):
@@ -22,7 +23,7 @@ def send_request(json_dict):
 
 
 def random_date():
-    year = random.randint(2014, 2019)
+    year = random.randint(datetime.now().year - 5, datetime.now().year)
     month = random.randint(1, 12)
     if month in (1, 3, 5, 7, 8, 10, 12):
         day = random.randint(1, 31)
@@ -34,7 +35,10 @@ def random_date():
     minute = random.randint(0, 59)
     second = random.randint(0, 59)
     date = str(year) + '-' + str(month) + '-' + str(day) + ' ' + str(hour) + ':' + str(minute) + ':' + str(second)
-    return date
+    if datetime(year, month, day, hour, minute, second) > datetime.now():
+        return random_date()
+    else:
+        return date
 
 
 withDate = False
@@ -49,7 +53,7 @@ with open('json_file.json', 'r') as jsonfile:
     print('results:')
     dump = json.load(jsonfile)
     counter = 1
-    while counter <= 1000:
+    while counter <= 10000:
         choice = random.choice(dump)
         if withDate:
             dice = 1
